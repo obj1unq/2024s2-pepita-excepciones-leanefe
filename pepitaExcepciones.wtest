@@ -1,0 +1,26 @@
+import pepita.*
+
+describe "Milena con Pepita y Pepón" {
+
+    test "Milena puede movilizarlas 4km" {
+        milena.agregarAve(pepita)
+        milena.agregarAve(pepon)
+        assert.doesNotThrowException({milena.movilizar(4)})
+    }
+
+    test "Milena no puede movilizarlas 6km (pepita puede volar, pepón no)" {
+        milena.agregarAve(pepita)
+        milena.agregarAve(pepon)
+        assert.throwsException({milena.movilizar(6)})
+        assert.equals(100, pepita.energia())
+        assert.equals(30, pepon.energia())
+    }
+
+    test "Milena no puede movilizarlas 100km" {
+        milena.agregarAve(pepita)
+        milena.agregarAve(pepon)
+        assert.throwsException({milena.movilizar(100)})
+        assert.equals(100, pepita.energia())
+        assert.equals(30, pepon.energia())
+    }
+}
