@@ -10,7 +10,6 @@ object pepita {
 	}
 	
 	method volar(distancia) {
-		self.validarCapacidadDeVolar(distancia)
 		energia = energia - self.energiaGastadaAlVolar(distancia)
 	}
 
@@ -18,9 +17,8 @@ object pepita {
 		return distancia + 10
 	}
 
-	method validarCapacidadDeVolar(distancia) {
-		if (self.energiaGastadaAlVolar(distancia) > energia)
-			self.error("La energia que gastaria al volar (" + self.energiaGastadaAlVolar(distancia) + ") es mayor que su energia actual (" + energia + ").")
+	method puedeVolar(distancia) {
+		return self.energiaGastadaAlVolar(distancia) <= energia
 	}
 
 }
@@ -61,11 +59,10 @@ object pepon {
 	}
 		
 	method comer(comida) {
-		energia += energia + comida.energiaQueAporta() / 2
+		energia = energia + comida.energiaQueAporta() / 2
 	}
 		
 	method volar(distancia) {
-		self.validarCapacidadDeVolar(distancia)
 		energia = energia - self.energiaGastadaAlVolar(distancia)
 	}
 
@@ -73,11 +70,9 @@ object pepon {
 		return 2 * distancia + 20
 	}
 
-	method validarCapacidadDeVolar(distancia) {
-		if (self.energiaGastadaAlVolar(distancia) > energia)
-			self.error("La energia que gastaria al volar (" + self.energiaGastadaAlVolar(distancia) + ") es mayor que su energia actual (" + energia + ").")
-	}
-	
+	method puedeVolar(distancia) {
+		return self.energiaGastadaAlVolar(distancia) <= energia
+	}	
 }
 
 object roque {
@@ -103,7 +98,17 @@ object milena {
 	}
 
 	method movilizar(distancia) {
+		self.validarMovilizacion(distancia)
 		aves.forEach({ave => ave.volar(distancia)})
+	}
+
+	method validarMovilizacion(distancia) {
+		if(not self.puedeMovilizar(distancia))
+			self.error("Milena no puede movilizar a las aves. Al menos una no tiene la energía suficiente.")
+	}
+
+	method puedeMovilizar(distancia){
+		return aves.all({ave => ave.puedeVolar(distancia)})
 	}
 }
 
