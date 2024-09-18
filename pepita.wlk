@@ -1,17 +1,28 @@
 object pepita {
 	var energia = 100
-	
+
+	method energia() {
+		return energia
+	}
+
 	method comer(comida) {
 		energia = energia + comida.energiaQueAporta()
 	}
 	
 	method volar(distancia) {
-		energia = energia - 10 - distancia
+		self.validarCapacidadDeVolar(distancia)
+		energia = energia - self.energiaGastadaAlVolar(distancia)
 	}
-		
-	method energia() {
-		return energia
+
+	method energiaGastadaAlVolar(distancia) {
+		return distancia + 10
 	}
+
+	method validarCapacidadDeVolar(distancia) {
+		if (self.energiaGastadaAlVolar(distancia) > energia)
+			self.error("La energia que gastaria al volar (" + self.energiaGastadaAlVolar(distancia) + ") es mayor que su energia actual (" + energia + ").")
+	}
+
 }
 
 object alpiste {
@@ -54,7 +65,17 @@ object pepon {
 	}
 		
 	method volar(distancia) {
-		energia = energia - 20 - 2*distancia
+		self.validarCapacidadDeVolar(distancia)
+		energia = energia - self.energiaGastadaAlVolar(distancia)
+	}
+
+	method energiaGastadaAlVolar(distancia) {
+		return 2 * distancia + 20
+	}
+
+	method validarCapacidadDeVolar(distancia) {
+		if (self.energiaGastadaAlVolar(distancia) > energia)
+			self.error("La energia que gastaria al volar (" + self.energiaGastadaAlVolar(distancia) + ") es mayor que su energia actual (" + energia + ").")
 	}
 	
 }
@@ -71,6 +92,18 @@ object roque {
 	method alimentar(alimento) {
 		ave.comer(alimento)
 		cenas = cenas + 1
+	}
+}
+
+object milena {
+	const aves = #{}
+
+	method agregarAve(ave) {
+		aves.add(ave)
+	}
+
+	method movilizar(distancia) {
+		aves.forEach({ave => ave.volar(distancia)})
 	}
 }
 
